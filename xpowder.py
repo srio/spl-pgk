@@ -35,15 +35,15 @@ ev2meter = codata_h*codata_c/codata_ec
 def structure_silicon():
     cryst = {} # cryst.copy()
 
-    cryst['name'] = b"Si"
-    cryst['a'] =  5.430699825286865
-    cryst['b'] =  5.430699825286865
-    cryst['c'] =  5.430699825286865
-    cryst['alpha'] = 90.0
-    cryst['beta'] =  90.0
-    cryst['gamma'] = 90.0
+    cryst['name']   = b"Si"
+    cryst['a']      =  5.430699825286865
+    cryst['b']      =  5.430699825286865
+    cryst['c']      =  5.430699825286865
+    cryst['alpha']  = 90.0
+    cryst['beta']   =  90.0
+    cryst['gamma']  = 90.0
     cryst['n_atom'] =  8
-    cryst['atom'] = [  {'x': 0.0,  'y': 0.0,  'z': 0.0,  'Zatom': 14, 'fraction': 1.0, 'label':'Si'},
+    cryst['atom']   = [  {'x': 0.0,  'y': 0.0,  'z': 0.0,  'Zatom': 14, 'fraction': 1.0, 'label':'Si'},
                        {'x': 0.0,  'y': 0.5,  'z': 0.5,  'Zatom': 14, 'fraction': 1.0, 'label':'Si'},
                        {'x': 0.5,  'y': 0.0,  'z': 0.5,  'Zatom': 14, 'fraction': 1.0, 'label':'Si'},
                        {'x': 0.5,  'y': 0.5,  'z': 0.0,  'Zatom': 14, 'fraction': 1.0, 'label':'Si'},
@@ -54,6 +54,24 @@ def structure_silicon():
     cryst['volume'] = 160.16493225097656
 
     return cryst
+
+def structure_info(cryst):
+    txt = ""
+    txt += "name: %s\n"   %  (cryst['name']  )
+    txt += "a: %f\n"      %  (cryst['a']     )
+    txt += "b: %f\n"      %  (cryst['b']     )
+    txt += "c: %f\n"      %  (cryst['c']     )
+    txt += "alpha: %f\n"  %  (cryst['alpha'] )
+    txt += "beta: %f\n"   %  (cryst['beta']  )
+    txt += "gamma: %f\n"  %  (cryst['gamma'] )
+    txt += "n_atom: %d\n" %  (cryst['n_atom'])
+    txt += "volume: %f\n" %  (cryst['volume'])
+    for atom in cryst['atom']:
+        txt += "Z f x y z label: %d   %3.1f   %5.3f   %5.3f   %5.3f   %s \n"%(atom['Zatom'],atom['fraction'],
+                    atom['x'],atom['y'],atom['z'],atom['label'])
+
+
+    return txt
 
 def structure_sepiolite():
     cryst = {} # cryst.copy()
@@ -206,6 +224,78 @@ def structure_sepiolite():
 
     return cryst
 
+def structure_group(cryst1,cryst2,axis='a'):
+    cryst = {} # cryst.copy()
+
+    cryst['name'] = cryst1['name']+b"+"+cryst2['name']
+    if axis == 'a':
+        cryst['a'] =  cryst1['a'] + cryst2['a']
+        cryst['b'] =  cryst1['b']
+        cryst['c'] =  cryst1['c']
+        if cryst1['b'] != cryst2['b']:
+            print("Warning: b axes are not the same!")
+        if cryst1['c'] != cryst2['c']:
+            print("Warning: c axes are not the same (taken the first one)!")
+    elif axis == 'b':
+        cryst['a'] =  cryst1['a']
+        cryst['b'] =  cryst1['b'] + cryst2['b']
+        cryst['c'] =  cryst1['c']
+        if cryst1['a'] != cryst2['a']:
+            print("Warning: a axes are not the same (taken the first one)!")
+        if cryst1['c'] != cryst2['c']:
+            print("Warning: c axes are not the same (taken the first one)!")
+    elif axis == 'c':
+        cryst['a'] =  cryst1['a']
+        cryst['b'] =  cryst1['b']
+        cryst['c'] =  cryst1['c'] + cryst2['c']
+        if cryst1['b'] != cryst2['b']:
+            print("Warning: b axes are not the same (taken the first one)!")
+        if cryst1['a'] != cryst2['a']:
+            print("Warning: a axes are not the same (taken the first one)!")
+    else:
+        raise Exception("Error: Bad grouping axis.")
+
+    cryst['alpha'] = cryst1['alpha']
+    cryst['beta'] =  cryst1['beta']
+    cryst['gamma'] = cryst1['gamma']
+
+    cryst['n_atom'] =  cryst1['n_atom'] + cryst2['n_atom']
+
+    tmp = []
+    for at1 in cryst1['atom']:
+        at11 = at1.copy()
+        if axis == 'a':
+            scale = cryst1['a'] / (cryst1['a'] + cryst2['a'])
+            at11['x'] *= scale
+        if axis == 'b':
+            scale = cryst1['b'] / (cryst1['b'] + cryst2['b'])
+            at11['y'] *= scale
+        if axis == 'c':
+            scale = cryst1['c'] / (cryst1['c'] + cryst2['c'])
+            at11['z'] *= scale
+        tmp.append(at11)
+
+    for at1 in cryst2['atom']:
+        at11 = at1.copy()
+        if axis == 'a':
+            scale = cryst2['a'] / (cryst1['a'] + cryst2['a'])
+            at11['x'] *= scale
+            at11['x'] += cryst1['a'] / (cryst1['a'] + cryst2['a'])
+        if axis == 'b':
+            scale = cryst2['b'] / (cryst1['b'] + cryst2['b'])
+            at11['y'] *= scale
+            at11['y'] += cryst1['a'] / (cryst1['a'] + cryst2['a'])
+        if axis == 'c':
+            scale = cryst2['c'] / (cryst1['c'] + cryst2['c'])
+            at11['z'] *= scale
+            at11['z'] += cryst1['a'] / (cryst1['a'] + cryst2['a'])
+        tmp.append(at11)
+
+    cryst['atom'] = tmp
+
+    cryst['volume'] = cryst['a'] * cryst['b'] * cryst['c']
+    return cryst
+
 
 def lorentz(theta_bragg_deg):
     tr = theta_bragg_deg * numpy.pi / 180.
@@ -216,7 +306,7 @@ def lorentz(theta_bragg_deg):
     return polarization_factor*lorentz_factor*geometrical_factor
 
 
-def plot_lines(x1,y1,xtitle=r"$2\theta$",ytitle="Intensity",toptitle=""):
+def plot_lines(x1,y1,xtitle=r"$2\theta$",ytitle="Intensity",toptitle="",noblock=0):
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -224,7 +314,7 @@ def plot_lines(x1,y1,xtitle=r"$2\theta$",ytitle="Intensity",toptitle=""):
     x = numpy.repeat(x1,3)
     y = numpy.zeros_like(x)
     idx = -1
-    for i in range(out[8,:].size):
+    for i in range(x1.size):
         idx += 1
         y[idx] = 0.0
         idx += 1
@@ -238,7 +328,8 @@ def plot_lines(x1,y1,xtitle=r"$2\theta$",ytitle="Intensity",toptitle=""):
     plt.xlabel(xtitle)
     plt.ylabel(ytitle)
 
-    plt.show()
+    if noblock == 0:
+        plt.show()
 
 def calculate_reflections(cryst,wavelength_in_A=1.0,debyeWaller=1.0,rel_angle=1.0,twotheta_max=30.0,structure_factor_min=1e-3,file_out="",verbose=1):
     """
@@ -382,10 +473,82 @@ def calculate_reflections(cryst,wavelength_in_A=1.0,debyeWaller=1.0,rel_angle=1.
 
     return out.copy()
 
-if __name__ == "__main__":
-
+def test_sepiolite_pattern():
     cryst =  structure_sepiolite()
 
     out = calculate_reflections(cryst, wavelength_in_A=1.0, twotheta_max=30.0, structure_factor_min=1e-3,file_out="",verbose=1)
 
+    print("out shape",out.shape)
     plot_lines(out[5,:],out[8,:])
+
+def test_group_si():
+    si = structure_silicon()
+    out = calculate_reflections(si, wavelength_in_A=1.0, twotheta_max=60.0, structure_factor_min=1e-3,file_out="",verbose=1)
+    plot_lines(out[5,:],out[8,:],toptitle="Si",noblock=1)
+
+    #
+    #
+
+    ss = structure_group(si,si,axis='a')
+    ss_ss = structure_group(ss,ss,axis='b')
+    ss_ss_ss = structure_group(ss_ss,ss_ss,axis='c')
+
+    out = calculate_reflections(ss_ss_ss, wavelength_in_A=1.0, twotheta_max=60.0, structure_factor_min=1e-3,file_out="",verbose=1)
+    plot_lines(out[5,:],out[8,:],toptitle="SiSi",noblock=0)
+
+
+
+    print(structure_info(si))
+
+    print(structure_info(ss_ss_ss))
+
+def test_group_sepiolite():
+    s = structure_sepiolite()
+    out = calculate_reflections(s, wavelength_in_A=1.0, twotheta_max=15.0, structure_factor_min=1e-3,file_out="",verbose=1)
+    plot_lines(out[5,:],out[8,:],toptitle="Sepiolite",noblock=1)
+
+    #
+    #
+
+    ss = structure_group(s,s,axis='a')
+    ss_ss = structure_group(ss,ss,axis='b')
+    ss_ss_ss = structure_group(ss_ss,ss_ss,axis='c')
+    #
+    out = calculate_reflections(ss_ss_ss, wavelength_in_A=1.0, twotheta_max=15.0, structure_factor_min=1e-3,file_out="",verbose=1)
+    plot_lines(out[5,:],out[8,:],toptitle="Supercell",noblock=0)
+
+
+
+    print(structure_info(s))
+
+    print(structure_info(ss_ss_ss))
+
+
+if __name__ == "__main__":
+
+    # test_sepiolite_pattern()
+
+    # test_group_si()
+
+    # test_group_sepiolite()
+
+    s = structure_sepiolite()
+    out = calculate_reflections(s, wavelength_in_A=1.0, twotheta_max=15.0, structure_factor_min=1e-3,file_out="",verbose=1)
+    plot_lines(out[5,:],out[8,:],toptitle="Sepiolite",noblock=1)
+
+    #
+    #
+
+    ss = structure_group(s,s,axis='a')
+    ss_ss = structure_group(ss,ss,axis='b')
+    ss_ss_ss = structure_group(ss_ss,ss_ss,axis='c')
+    #
+    out = calculate_reflections(ss_ss_ss, wavelength_in_A=1.0, twotheta_max=15.0, structure_factor_min=1e-3,file_out="",verbose=1)
+    plot_lines(out[5,:],out[8,:],toptitle=ss_ss_ss['name'],noblock=0)
+
+
+
+    print(structure_info(s))
+
+    print(structure_info(ss_ss_ss))
+
