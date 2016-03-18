@@ -216,7 +216,7 @@ def lorentz(theta_bragg_deg):
     return polarization_factor*lorentz_factor*geometrical_factor
 
 
-def plot_lines(x1,y1):
+def plot_lines(x1,y1,xtitle=r"$2\theta$",ytitle="Intensity",toptitle=""):
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -234,159 +234,158 @@ def plot_lines(x1,y1):
 
     numBins = 50
     ax.plot(x,y,color='green')
-
+    plt.title(toptitle)
+    plt.xlabel(xtitle)
+    plt.ylabel(ytitle)
 
     plt.show()
 
+def calculate_reflections(cryst,wavelength_in_A=1.0,debyeWaller=1.0,rel_angle=1.0,twotheta_max=30.0,structure_factor_min=1e-3,file_out="",verbose=1):
+    """
+    Calculate crystal reflections
+    :param cryst: crystal structure
+    :param wavelength_in_A: photon wavelength in m (default=1A)
+    :param debyeWaller: Debye-Waller term (default=1.0)
+    :param rel_angle: for structure factors, incident angle/ Bragg angle (default=1.0)
+    :param twotheta_max: Maximum 2theta for simulations in degrees (default=30 deg)
+    :param structure_factor_min: minimum value for structure factor for considering the reflectio.
+                 Set to a negative value to consider all reflections
+    :return: a numpy array [8,nreflections] with first index:
+             0 = miller index h
+             1 = miller index k
+             2 = miller index l
+             3 = dspacing in A
+             4 = |Real(Fh)} with Fh the structure factor
+             5 = 2thete: Twice the Bragg angle
+             6 = multiplicity of the reflection
+             7 = intensity (arbitrary units)
+             8 = intensity (% of highest reflection)
 
-if __name__ == "__main__":
-    #
-    # get crystal data for silicon crystal
-    #
-
-    cryst =  structure_sepiolite()
-
-
-    # print some info
-    print ("  Unit cell dimensions [A] are %f %f %f" % (cryst['a'],cryst['b'],cryst['c']))
-    print ("  Unit cell angles are %f %f %f" % (cryst['alpha'],cryst['beta'],cryst['gamma']))
-    print ("  Unit cell volume [A] is %f" % (cryst['volume']) )
-
-    for key in cryst:
-        print(">>",key," = ",cryst[key])
-
-
-
-
-    #
-    # define miller indices and compute dSpacing
-    #
-
-    hh = 1
-    kk = 1
-    ll = 0
-
-    dspacing = xraylib.Crystal_dSpacing(cryst,hh,kk,ll )
-    print("dspacing: %f A \n"%dspacing)
-    print(len(cryst))
+    """
+    photon_energy_in_keV = ev2meter / (wavelength_in_A*1e-10)
 
 
-
-
-
-    #
-    # define energy and get Bragg angle
-    #
-    photon_energy_in_keV = 12.398 # keV
-    wavelength = ev2meter/(photon_energy_in_keV*1e3) * 1e10
-    print("Wavelength: %f A"%(wavelength))
-    braggAngle = xraylib.Bragg_angle(cryst,photon_energy_in_keV,hh,kk,ll )
-    print("Bragg angle at energy=%6.3f keV is %f degrees \n"%(photon_energy_in_keV,braggAngle*180/numpy.pi))
-
-
-    #
-    # get the structure factor (at a given energy)
-    #
-
-
-    debyeWaller = 1.0
-    rel_angle = 1.0  # ratio of (incident angle)/(bragg angle) -> we work at Bragg angle
-    fH = xraylib.Crystal_F_H_StructureFactor(cryst, photon_energy_in_keV, hh, kk, ll, debyeWaller, rel_angle)
-    print("fH: (%f , %f) \n"%(fH.real,fH.imag))
-
-
-    #
     # get limits of indices
-    #
-
-    limitValue = 20.0 # max 2theta
-    dspacingmin = wavelength / 2 / numpy.sin(limitValue / 2 * numpy.pi / 180)
+    dspacingmin = wavelength_in_A / 2 / numpy.sin(twotheta_max / 2 * numpy.pi / 180)
     print("dspacingmin: ",dspacingmin)
-
     hmax = int(cryst['a']/dspacingmin)
     kmax = int(cryst['b']/dspacingmin)
     lmax = int(cryst['c']/dspacingmin)
 
-    #
-    # calculate reflections
-    #
-    out = numpy.zeros((9,(2*hmax+1)*(2*kmax+1)*(2*lmax+1)))
+
+    # loop over all reflections
+    nmiller = (2*hmax+1)*(2*kmax+1)*(2*lmax+1)-1
+    out = numpy.zeros((9,nmiller))
+    print("Total number of h k l permutations: %d"%nmiller)
+
     idx = -1
     for hh in range(-hmax,hmax+1):
         for kk in range(-kmax,kmax+1):
             for ll in range(-lmax,lmax+1):
+                if hh == 0 and kk == 00 and ll == 00: continue
                 dspacing = xraylib.Crystal_dSpacing(cryst,hh,kk,ll )
                 fH = xraylib.Crystal_F_H_StructureFactor(cryst, photon_energy_in_keV, hh, kk, ll, debyeWaller, rel_angle)
                 idx += 1
-                print("hkl: %3d %3d %3d, %5.3f A, F=%5.1f, idx:%4d"%(hh,kk,ll,dspacing, numpy.abs(numpy.real(fH)),idx))
+                # print("hkl: %3d %3d %3d, %5.3f A, F=%5.1f, idx:%4d"%(hh,kk,ll,dspacing, numpy.abs(numpy.real(fH)),idx))
                 out[0,idx] = hh
                 out[1,idx] = kk
                 out[2,idx] = ll
                 out[3,idx] = dspacing
-                out[4,idx] = numpy.real(fH)
-                out[5,idx] = xraylib.Bragg_angle(cryst,photon_energy_in_keV,hh,kk,ll ) * 2 * 180 / numpy.pi #2theta in deg
-                # reserved for multiplicity out[6,idx]
+                out[4,idx] = numpy.abs(numpy.real(fH))
+                # out[5,idx] = xraylib.Bragg_angle(cryst,photon_energy_in_keV,hh,kk,ll ) * 2 * 180 / numpy.pi #2theta in deg
+                out[5,idx] = numpy.arcsin(wavelength_in_A/2/dspacing) * 180.0 / numpy.pi * 2
+                out[6,idx] = 1.0 # reserved for multiplicity
                 # reserved for intensity out[7,idx]
                 # reserved for normalized intensity out[8,idx]
-
-    print("shape: ",out.shape)
-
+    n = out.shape[1]
 
     #
     # remove forbidden (or low intensity) reflections
     #
-    Fcut = 1e-3
 
-    igood = numpy.where( out[4,:] > Fcut)
-    igood = numpy.array(igood)
-    igood.shape = -1
-    print("igood shape: ",igood.shape)
+    if structure_factor_min >= 0:
+        igood = numpy.where( out[4,:] > structure_factor_min)
+        igood = numpy.array(igood)
+        igood.shape = -1
+        print("igood (forbiden) shape: ",igood.shape)
+        out = out[:,igood]
+        n = out.shape[1]
+        print("shape arter removing forbidden: ",out.shape)
 
-    out = out[:,igood]
-    print("shape: ",out.shape)
 
     #
-    # sort reflections
+    # group by multiplicity
     #
 
+    if 1:
+        # define a flag that distinguishes different reflections
+        out_flag = numpy.abs(out[0,:]) + numpy.abs(out[1,:]) * 2 + numpy.abs(out[2,:]) * 4
+        tmp = out[5,:] * (1.0 + out_flag * 1e-5)
+        shit, igood = numpy.unique(tmp, return_index=True)
 
-    # define a flag that distinguishes different reflections
-    out_flag = numpy.abs(out[0,:]) + numpy.abs(out[1,:]) * 2 + numpy.abs(out[2,:]) * 4
-    tmp = out[5,:] * (1.0 + out_flag * 1e-5)
-    shit, igood = numpy.unique(tmp, return_index=True)
+        igood = numpy.array(igood)
+        igood.shape = -1
+        n = igood.shape[0]
+        print("igood (multiplicity) shape: ",igood.shape)
 
-    igood = numpy.array(igood)
-    igood.shape = -1
-    n = igood.shape[0]
-    print("igood (multiplicity) shape: ",igood.shape)
+        out = out[:,igood]
+        tmp2 = tmp[igood]
 
-    out = out[:,igood]
-    tmp2 = tmp[igood]
+        # set multiplicities
+        for i in range(n):
+            print(i, numpy.array(numpy.where(tmp == tmp2[i])).size )
+            out[6,i] = numpy.array(numpy.where(tmp == tmp2[i])).size
 
-    # set multiplicities
+
+
+
+    #
+    # compute intensities
+    #
     for i in range(n):
-        print(i, numpy.array(numpy.where(tmp == tmp2[i])).size )
-        out[6,i] = numpy.array(numpy.where(tmp == tmp2[i])).size
-
-
-
-
-    idx_sorted = numpy.argsort(out[3,:])
-    print(idx_sorted)
-    for i in range(1,n):
         # M * F**2 * lorent_etc
         intensity = out[6,i] * out[4,i]**2 * lorentz(0.5*out[5,i])
+        print("hkl, M, F, L:",out[0,i],out[1,i],out[2,i],out[6,i],out[4,i],lorentz(0.5*out[5,i]))
         out[7,i] = intensity
 
     intensity_max =  out[7,:].max()
+    print("intensity: ", out[7,:])
+    print("intensity_max: ",intensity_max)
 
-    for i in range(1,n):
+    for i in range(n):
         out[8,i] = 100 * out[7,i] / intensity_max
 
-    for i in range(1,n):
-        print("(%2d%2d%2d), d: %4.2f, F:%6.2f, 2th:%5.2f deg, M:%1d, i:%15.2f, ni:%10.f"%(
-                out[0,i],out[1,i],out[2,i],
-                out[3,i],out[4,i],out[5,i],out[6,i],out[7,i],out[8,i]) )
+    #
+    # remove reflections at theta >
+    #
+    igood = numpy.where( out[5,:] <= twotheta_max)
+    igood = numpy.array(igood)
+    igood.shape = -1
+    out = out[:,igood]
 
+
+    txt = ("%4s "*3+"%15s "*4+"%15s "+"%15s "+"\n")%('h','k','l','2*Theta','d-spc','|F|','M','IntAll','IntNorm')
+    # ,format='(3A4,4A15,A15,2A15)')
+    n = out.shape[1]
+    for i in range(n):
+        txt += "%4d %4d %4d %15.5f %15.5f %15.5f %15d %15.5f %15.5f \n"%(
+                out[0,i],out[1,i],out[2,i],
+                out[3,i],out[4,i],out[5,i],out[6,i],out[7,i],out[8,i])
+
+    if file_out != "":
+        f = open(file_out,'w')
+        f.write(txt)
+        f.close()
+
+    if verbose:
+        print(txt)
+
+    return out.copy()
+
+if __name__ == "__main__":
+
+    cryst =  structure_sepiolite()
+
+    out = calculate_reflections(cryst, wavelength_in_A=1.0, twotheta_max=30.0, structure_factor_min=1e-3,file_out="",verbose=1)
 
     plot_lines(out[5,:],out[8,:])
