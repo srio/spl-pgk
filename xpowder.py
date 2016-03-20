@@ -67,7 +67,7 @@ def structure_info(cryst):
     txt += "n_atom: %d\n" %  (cryst['n_atom'])
     txt += "volume: %f\n" %  (cryst['volume'])
     for atom in cryst['atom']:
-        txt += "Z f x y z label: %d   %3.1f   %5.3f   %5.3f   %5.3f   %s \n"%(atom['Zatom'],atom['fraction'],
+        txt += "Z=%2d f:%3.1f xyz=(%5.3f, %5.3f, %5.3f)   %s \n"%(atom['Zatom'],atom['fraction'],
                     atom['x'],atom['y'],atom['z'],atom['label'])
 
 
@@ -223,6 +223,108 @@ def structure_sepiolite():
     cryst['volume'] = cryst['a'] * cryst['b'] * cryst['c']
 
     return cryst
+
+def structure_palygorskiteO():
+    cryst = {} # cryst.copy()
+
+    cryst['name']   = b"PalygorskiteO"
+    cryst['a']      =  12.78
+    cryst['b']      =  17.89
+    cryst['c']      =  5.21
+    cryst['alpha']  = 90.0
+    cryst['beta']   = 90.0
+    cryst['gamma']  = 90.0
+    cryst['n_atom'] = 84
+    cryst['volume'] = cryst['a'] * cryst['b'] * cryst['c']
+
+    cryst['atom']   = [
+        {'Zatom': 13, 'fraction': 1.000, 'x':   0.000  ,'y':  0.08333   ,'z':   0.5000  ,'label': '   Al  '},
+        {'Zatom': 13, 'fraction': 1.000, 'x':  0.5000  ,'y':   0.4166   ,'z':   0.5000  ,'label': '   Al  '},
+        {'Zatom': 13, 'fraction': 1.000, 'x':   0.000  ,'y':   0.9166   ,'z':   0.5000  ,'label': '   Al  '},
+        {'Zatom': 13, 'fraction': 1.000, 'x':  0.5000  ,'y':   0.5833   ,'z':   0.5000  ,'label': '   Al  '},
+        {'Zatom': 12, 'fraction': 1.000, 'x':   0.000  ,'y':   0.1666   ,'z':    0.000  ,'label': '   Mg  '},
+        {'Zatom': 12, 'fraction': 1.000, 'x':  0.5000  ,'y':   0.3333   ,'z':    0.000  ,'label': '   Mg  '},
+        {'Zatom': 12, 'fraction': 1.000, 'x':   0.000  ,'y':   0.8333   ,'z':    0.000  ,'label': '   Mg  '},
+        {'Zatom': 12, 'fraction': 1.000, 'x':  0.5000  ,'y':   0.6666   ,'z':    0.000  ,'label': '   Mg  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.2083  ,'y':  0.08333   ,'z':   0.8333  ,'label': '  Si1  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.2916  ,'y':   0.4166   ,'z':   0.8333  ,'label': '  Si1  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.7083  ,'y':   0.4166   ,'z':   0.1666  ,'label': '  Si1  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.7916  ,'y':  0.08333   ,'z':   0.1666  ,'label': '  Si1  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.7916  ,'y':   0.9166   ,'z':   0.1666  ,'label': '  Si1  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.7083  ,'y':   0.5833   ,'z':   0.1666  ,'label': '  Si1  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.2916  ,'y':   0.5833   ,'z':   0.8333  ,'label': '  Si1  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.2083  ,'y':   0.9166   ,'z':   0.8333  ,'label': '  Si1  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.2083  ,'y':   0.1666   ,'z':   0.3333  ,'label': '  Si2  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.2916  ,'y':   0.3333   ,'z':   0.3333  ,'label': '  Si2  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.7083  ,'y':   0.3333   ,'z':   0.6666  ,'label': '  Si2  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.7916  ,'y':   0.1666   ,'z':   0.6666  ,'label': '  Si2  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.7916  ,'y':   0.8333   ,'z':   0.6666  ,'label': '  Si2  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.7083  ,'y':   0.6666   ,'z':   0.6666  ,'label': '  Si2  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.2916  ,'y':   0.6666   ,'z':   0.3333  ,'label': '  Si2  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':  0.2083  ,'y':   0.8333   ,'z':   0.3333  ,'label': '  Si2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x': 0.08333  ,'y':    0.000   ,'z':   0.3333  ,'label': '   OH  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.4166  ,'y':   0.5000   ,'z':   0.3333  ,'label': '   OH  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.5833  ,'y':   0.5000   ,'z':   0.6666  ,'label': '   OH  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.9166  ,'y':    0.000   ,'z':   0.6666  ,'label': '   OH  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x': 0.08333  ,'y':  0.08333   ,'z':   0.8333  ,'label': '   O1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.4166  ,'y':   0.4166   ,'z':   0.8333  ,'label': '   O1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.5833  ,'y':   0.4166   ,'z':   0.1666  ,'label': '   O1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.9166  ,'y':  0.08333   ,'z':   0.1666  ,'label': '   O1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.9166  ,'y':   0.9166   ,'z':   0.1666  ,'label': '   O1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.5833  ,'y':   0.5833   ,'z':   0.1666  ,'label': '   O1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.4166  ,'y':   0.5833   ,'z':   0.8333  ,'label': '   O1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x': 0.08333  ,'y':   0.9166   ,'z':   0.8333  ,'label': '   O1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x': 0.08333  ,'y':   0.1666   ,'z':   0.3333  ,'label': '   O2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.4166  ,'y':   0.3333   ,'z':   0.3333  ,'label': '   O2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.5833  ,'y':   0.3333   ,'z':   0.6666  ,'label': '   O2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.9166  ,'y':   0.1666   ,'z':   0.6666  ,'label': '   O2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.9166  ,'y':   0.8333   ,'z':   0.6666  ,'label': '   O2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.5833  ,'y':   0.6666   ,'z':   0.6666  ,'label': '   O2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.4166  ,'y':   0.6666   ,'z':   0.3333  ,'label': '   O2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x': 0.08333  ,'y':   0.8333   ,'z':   0.3333  ,'label': '   O2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x': 0.08333  ,'y':   0.2500   ,'z':   0.8333  ,'label': ' H2OB  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.4166  ,'y':   0.2500   ,'z':   0.8333  ,'label': ' H2OB  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.5833  ,'y':   0.2500   ,'z':   0.1666  ,'label': ' H2OB  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.9166  ,'y':   0.2500   ,'z':   0.1666  ,'label': ' H2OB  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.9166  ,'y':   0.7500   ,'z':   0.1666  ,'label': ' H2OB  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.5833  ,'y':   0.7500   ,'z':   0.1666  ,'label': ' H2OB  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.4166  ,'y':   0.7500   ,'z':   0.8333  ,'label': ' H2OB  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x': 0.08333  ,'y':   0.7500   ,'z':   0.8333  ,'label': ' H2OB  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.2500  ,'y':    0.000   ,'z':   0.8333  ,'label': '   O3  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.2500  ,'y':   0.5000   ,'z':   0.8333  ,'label': '   O3  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.7500  ,'y':   0.5000   ,'z':   0.1666  ,'label': '   O3  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.7500  ,'y':    0.000   ,'z':   0.1666  ,'label': '   O3  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.2500  ,'y':   0.2500   ,'z':   0.3333  ,'label': '   O4  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.7500  ,'y':   0.2500   ,'z':   0.6666  ,'label': '   O4  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.7500  ,'y':   0.7500   ,'z':   0.6666  ,'label': '   O4  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.2500  ,'y':   0.7500   ,'z':   0.3333  ,'label': '   O4  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.2500  ,'y':   0.1250   ,'z':   0.5833  ,'label': '   O5  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.2500  ,'y':   0.3750   ,'z':   0.5833  ,'label': '   O5  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.7500  ,'y':   0.3750   ,'z':   0.4166  ,'label': '   O5  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.7500  ,'y':   0.1250   ,'z':   0.4166  ,'label': '   O5  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.7500  ,'y':   0.8750   ,'z':   0.4166  ,'label': '   O5  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.7500  ,'y':   0.6250   ,'z':   0.4166  ,'label': '   O5  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.2500  ,'y':   0.6250   ,'z':   0.5833  ,'label': '   O5  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.2500  ,'y':   0.8750   ,'z':   0.5833  ,'label': '   O5  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.2500  ,'y':   0.1250   ,'z':  0.08333  ,'label': '   O6  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.2500  ,'y':   0.3750   ,'z':  0.08333  ,'label': '   O6  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.7500  ,'y':   0.3750   ,'z':   0.9166  ,'label': '   O6  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.7500  ,'y':   0.1250   ,'z':   0.9166  ,'label': '   O6  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.7500  ,'y':   0.8750   ,'z':   0.9166  ,'label': '   O6  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.7500  ,'y':   0.6250   ,'z':   0.9166  ,'label': '   O6  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.2500  ,'y':   0.6250   ,'z':  0.08333  ,'label': '   O6  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.2500  ,'y':   0.8750   ,'z':  0.08333  ,'label': '   O6  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.000  ,'y':   0.3333   ,'z':   0.5000  ,'label': '  ZW1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.5000  ,'y':   0.1666   ,'z':   0.5000  ,'label': '  ZW1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.000  ,'y':   0.6666   ,'z':   0.5000  ,'label': '  ZW1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.5000  ,'y':   0.8333   ,'z':   0.5000  ,'label': '  ZW1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.000  ,'y':   0.4166   ,'z':    0.000  ,'label': '  ZW2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.5000  ,'y':  0.08333   ,'z':    0.000  ,'label': '  ZW2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.000  ,'y':   0.5833   ,'z':    0.000  ,'label': '  ZW2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':  0.5000  ,'y':   0.9166   ,'z':    0.000  ,'label': '  ZW2  '}  ]
+
+    return cryst
+
 
 def structure_group(cryst1,cryst2,axis='a'):
     cryst = {} # cryst.copy()
@@ -458,10 +560,19 @@ def calculate_reflections(cryst,wavelength_in_A=1.0,debyeWaller=1.0,rel_angle=1.
     txt = ("%4s "*3+"%15s "*4+"%15s "+"%15s "+"\n")%('h','k','l','2*Theta','d-spc','|F|','M','IntAll','IntNorm')
     # ,format='(3A4,4A15,A15,2A15)')
     n = out.shape[1]
+    # 0 = miller index h
+    # 1 = miller index k
+    # 2 = miller index l
+    # 3 = dspacing in A
+    # 4 = |Real(Fh)} with Fh the structure factor
+    # 5 = 2thete: Twice the Bragg angle
+    # 6 = multiplicity of the reflection
+    # 7 = intensity (arbitrary units)
+    # 8 = intensity (% of highest reflection)
     for i in range(n):
         txt += "%4d %4d %4d %15.5f %15.5f %15.5f %15d %15.5f %15.5f \n"%(
                 out[0,i],out[1,i],out[2,i],
-                out[3,i],out[4,i],out[5,i],out[6,i],out[7,i],out[8,i])
+                out[5,i],out[3,i],out[4,i],out[6,i],out[7,i],out[8,i])
 
     if file_out != "":
         f = open(file_out,'w')
@@ -523,6 +634,23 @@ def test_group_sepiolite():
 
     print(structure_info(ss_ss_ss))
 
+def test_group_ab(a=structure_sepiolite(),b=structure_palygorskiteO()):
+
+    out = calculate_reflections(a, wavelength_in_A=1.0, twotheta_max=15.0, structure_factor_min=1e-3,file_out="",verbose=1)
+    plot_lines(out[5,:],out[8,:],toptitle=a['name'],noblock=1)
+
+    #
+    #
+    #
+    ab = structure_group(a,b,axis='a')
+    ab_ab = structure_group(ab,ab,axis='b')
+    ab_ab_ab = structure_group(ab_ab,ab_ab,axis='c')
+    #
+    out = calculate_reflections(ab_ab_ab, wavelength_in_A=1.0, twotheta_max=15.0, structure_factor_min=1e-3,file_out="",verbose=1)
+    plot_lines(out[5,:],out[8,:],toptitle=ab_ab_ab['name'],noblock=0)
+
+
+    print(structure_info(ab_ab_ab))
 
 if __name__ == "__main__":
 
@@ -532,23 +660,5 @@ if __name__ == "__main__":
 
     # test_group_sepiolite()
 
-    s = structure_sepiolite()
-    out = calculate_reflections(s, wavelength_in_A=1.0, twotheta_max=15.0, structure_factor_min=1e-3,file_out="",verbose=1)
-    plot_lines(out[5,:],out[8,:],toptitle="Sepiolite",noblock=1)
-
-    #
-    #
-
-    ss = structure_group(s,s,axis='a')
-    ss_ss = structure_group(ss,ss,axis='b')
-    ss_ss_ss = structure_group(ss_ss,ss_ss,axis='c')
-    #
-    out = calculate_reflections(ss_ss_ss, wavelength_in_A=1.0, twotheta_max=15.0, structure_factor_min=1e-3,file_out="",verbose=1)
-    plot_lines(out[5,:],out[8,:],toptitle=ss_ss_ss['name'],noblock=0)
-
-
-
-    print(structure_info(s))
-
-    print(structure_info(ss_ss_ss))
+    test_group_ab(a=structure_palygorskiteO(),b=structure_palygorskiteO())
 
