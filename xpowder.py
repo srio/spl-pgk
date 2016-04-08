@@ -55,7 +55,7 @@ def structure_silicon():
 
     return cryst
 
-def structure_info(cryst):
+def structure_info(cryst,verbose=0,file_out=""):
     txt = ""
     txt += "name: %s\n"   %  (cryst['name']  )
     txt += "a: %f\n"      %  (cryst['a']     )
@@ -70,6 +70,13 @@ def structure_info(cryst):
         txt += "Z=%2d f:%3.1f xyz=(%5.3f, %5.3f, %5.3f)   %s \n"%(atom['Zatom'],atom['fraction'],
                     atom['x'],atom['y'],atom['z'],atom['label'])
 
+    if file_out != "":
+        f = open(file_out,'w')
+        f.write(txt)
+        f.close()
+
+    if verbose:
+        print(txt)
 
     return txt
 
@@ -584,6 +591,42 @@ def calculate_reflections(cryst,wavelength_in_A=1.0,debyeWaller=1.0,rel_angle=1.
 
     return out.copy()
 
+
+def reconvert_axes(p):
+
+    p2 = p.copy()
+
+    beta = 2 * numpy.arctan(p['a']/p['b'])
+    p2['beta'] = beta * 180 / numpy.pi
+
+    at = p2['atom']
+
+    for i,iat in enumerate(at):
+        x = iat['x']
+        y = iat['y']
+        z = iat['z']
+
+        x_new = ( x + y - 1)
+        y_new = z
+        z_new =( y - x )
+
+        if x_new < 0: x_new += 1
+        if y_new < 0: y_new += 1
+        if z_new < 0: z_new += 1
+
+        iat['x'] = x_new
+        iat['y'] = y_new
+        iat['z'] = z_new
+
+        # print("%10s (%4.3f %4.3f) new: (%4.3f %4.3f) "%(iat['label'],x,y,x_new,z_new))
+
+    p2['a'] = numpy.sqrt( (p['a']/2)**2 + (p['b']/2)**2 )
+    p2['c'] = p2['a']
+    p2['b'] = p['c']
+    p2['name'] = p['name']+b" WITH AXES CHANGED"
+
+    return p2
+
 def test_sepiolite_pattern():
     cryst =  structure_sepiolite()
 
@@ -660,5 +703,19 @@ if __name__ == "__main__":
 
     # test_group_sepiolite()
 
-    test_group_ab(a=structure_palygorskiteO(),b=structure_palygorskiteO())
+    # test_group_ab(a=structure_palygorskiteO(),b=structure_palygorskiteO())
 
+    # p = structure_palygorskiteO()
+    #
+    # wavelength_in_A = ev2meter/13000.0*1e10
+    #
+    # out = calculate_reflections(p, wavelength_in_A=wavelength_in_A, twotheta_max=50.0, structure_factor_min=1e-3,file_out="",verbose=1)
+    # plot_lines(out[5,:],out[8,:],toptitle=p['name'],noblock=1)
+    #
+    # print('Ẅavelength is :',wavelength_in_A)
+
+    p = structure_palygorskiteO()
+
+    p2 = reconvert_axes(p)
+
+    structure_info(p2,verbose=1,file_out="tmp.txt")
