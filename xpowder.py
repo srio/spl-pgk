@@ -28,9 +28,9 @@ codata_r, tmp1, tmp2 = codata["classical electron radius"]
 ev2meter = codata_h*codata_c/codata_ec
 
 
-
-
-
+#
+# crystal structures
+#
 
 def structure_silicon():
     cryst = {} # cryst.copy()
@@ -55,30 +55,6 @@ def structure_silicon():
 
     return cryst
 
-def structure_info(cryst,verbose=0,file_out=""):
-    txt = ""
-    txt += "name: %s\n"   %  (cryst['name']  )
-    txt += "a: %f\n"      %  (cryst['a']     )
-    txt += "b: %f\n"      %  (cryst['b']     )
-    txt += "c: %f\n"      %  (cryst['c']     )
-    txt += "alpha: %f\n"  %  (cryst['alpha'] )
-    txt += "beta: %f\n"   %  (cryst['beta']  )
-    txt += "gamma: %f\n"  %  (cryst['gamma'] )
-    txt += "n_atom: %d\n" %  (cryst['n_atom'])
-    txt += "volume: %f\n" %  (cryst['volume'])
-    for atom in cryst['atom']:
-        txt += "Z=%2d f:%3.1f xyz=(%5.3f, %5.3f, %5.3f)   %s \n"%(atom['Zatom'],atom['fraction'],
-                    atom['x'],atom['y'],atom['z'],atom['label'])
-
-    if file_out != "":
-        f = open(file_out,'w')
-        f.write(txt)
-        f.close()
-
-    if verbose:
-        print(txt)
-
-    return txt
 
 def structure_sepiolite():
     cryst = {} # cryst.copy()
@@ -224,9 +200,9 @@ def structure_sepiolite():
         {'Zatom':8      ,'fraction':1.000  ,'x':  0.5000   ,'y': 0.01500   ,'z':  0.2500  ,'label':'  W3_O2(4)'},
         {'Zatom':8      ,'fraction':1.000  ,'x':   0.000   ,'y':  0.5150   ,'z':  0.7500  ,'label':'  W3_O2(4)'},
         {'Zatom':8      ,'fraction':1.000  ,'x':   0.5000  ,'y':   0.9850  ,'z':   0.7500 ,'label':'   ZW3_O2(4)'} ]
-
-
-
+    
+    
+    
     cryst['volume'] = cryst['a'] * cryst['b'] * cryst['c']
 
     return cryst
@@ -329,9 +305,132 @@ def structure_palygorskiteO():
         {'Zatom': 8., 'fraction': 1.000, 'x':  0.5000  ,'y':  0.08333   ,'z':    0.000  ,'label': '  ZW2  '},
         {'Zatom': 8., 'fraction': 1.000, 'x':   0.000  ,'y':   0.5833   ,'z':    0.000  ,'label': '  ZW2  '},
         {'Zatom': 8., 'fraction': 1.000, 'x':  0.5000  ,'y':   0.9166   ,'z':    0.000  ,'label': '  ZW2  '}  ]
+	
+	
+	
+    cryst['volume'] = cryst['a'] * cryst['b'] * cryst['c']
+
+    return cryst
+    
+def structure_palygorskite_new():
+    cryst = {} # cryst.copy()
+
+    cryst['name']   = b"Palygorskite_new"
+    cryst['a']      =  10.99
+    cryst['b']      =  5.21
+    cryst['c']      =  10.99
+    cryst['alpha']  = 90.0
+    cryst['beta']   = 71.08
+    cryst['gamma']  = 90.0
+    cryst['n_atom'] = 52
+    cryst['volume'] = cryst['a'] * cryst['b'] * cryst['c']
+
+    cryst['atom']   = [
+        {'Zatom': 13, 'fraction': 1.000, 'x':   0.083  ,'y':    0.500   ,'z':    0.083  ,'label': '  Al   '},
+        {'Zatom': 13, 'fraction': 1.000, 'x':   0.917  ,'y':    0.500   ,'z':    0.917  ,'label': '  Al   '},
+        {'Zatom': 12, 'fraction': 1.000, 'x':   0.167  ,'y':    0.000   ,'z':    0.167  ,'label': '  Mg1  '},
+        {'Zatom': 12, 'fraction': 1.000, 'x':   0.833  ,'y':    1.000   ,'z':    0.833  ,'label': '  Mg1  '},
+        {'Zatom': 12, 'fraction': 1.000, 'x':   0.833  ,'y':    0.000   ,'z':    0.833  ,'label': '  Mg2  '},
+        {'Zatom': 12, 'fraction': 1.000, 'x':   0.167  ,'y':    1.000   ,'z':    0.167  ,'label': '  Mg2  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':   0.708  ,'y':    0.833   ,'z':    0.125  ,'label': '  Si1  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':   0.292  ,'y':    0.167   ,'z':    0.875  ,'label': '  Si1  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':   0.125  ,'y':    0.167   ,'z':    0.708  ,'label': '  Si2  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':   0.875  ,'y':    0.833   ,'z':    0.292  ,'label': '  Si2  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':   0.625  ,'y':    0.333   ,'z':    0.042  ,'label': '  Si3  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':   0.375  ,'y':    0.667   ,'z':    0.958  ,'label': '  Si3  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':   0.042  ,'y':    0.667   ,'z':    0.625  ,'label': '  Si4  '},
+        {'Zatom': 14, 'fraction': 1.000, 'x':   0.958  ,'y':    0.333   ,'z':    0.375  ,'label': '  Si4  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.917  ,'y':    0.333   ,'z':    0.083  ,'label': '  OH   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.083  ,'y':    0.667   ,'z':    0.917  ,'label': '  OH   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.167  ,'y':    0.833   ,'z':    0.000  ,'label': '  O1   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.833  ,'y':    0.167   ,'z':    1.000  ,'label': '  O1   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.833  ,'y':    0.833   ,'z':    0.000  ,'label': '  O2   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.167  ,'y':    0.167   ,'z':    1.000  ,'label': '  O2   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.000  ,'y':    0.167   ,'z':    0.833  ,'label': '  O3   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   1.000  ,'y':    0.833   ,'z':    0.167  ,'label': '  O3   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.000  ,'y':    0.167   ,'z':    0.167  ,'label': '  O4   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   1.000  ,'y':    0.833   ,'z':    0.833  ,'label': '  O4   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.250  ,'y':    0.333   ,'z':    0.083  ,'label': '  O5   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.750  ,'y':    0.667   ,'z':    0.917  ,'label': '  O5   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.083  ,'y':    0.667   ,'z':    0.250  ,'label': '  O6   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.917  ,'y':    0.333   ,'z':    0.750  ,'label': '  O6   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.333  ,'y':    0.833   ,'z':    0.167  ,'label': '  BW1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.667  ,'y':    0.167   ,'z':    0.833  ,'label': '  BW1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.167  ,'y':    0.167   ,'z':    0.333  ,'label': '  BW2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.833  ,'y':    0.833   ,'z':    0.667  ,'label': '  BW2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.750  ,'y':    0.833   ,'z':    0.250  ,'label': '  O7   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.250  ,'y':    0.167   ,'z':    0.750  ,'label': '  O7   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.500  ,'y':    0.333   ,'z':    0.000  ,'label': '  O8   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.500  ,'y':    0.667   ,'z':    1.000  ,'label': '  O8   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.000  ,'y':    0.667   ,'z':    0.500  ,'label': '  O9   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   1.000  ,'y':    0.333   ,'z':    0.500  ,'label': '  O9   '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.625  ,'y':    0.583   ,'z':    0.125  ,'label': '  O10  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.375  ,'y':    0.417   ,'z':    0.875  ,'label': '  O10  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.875  ,'y':    0.583   ,'z':    0.375  ,'label': '  O11  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.125  ,'y':    0.417   ,'z':    0.625  ,'label': '  O11  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.625  ,'y':    0.083   ,'z':    0.125  ,'label': '  O12  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.375  ,'y':    0.917   ,'z':    0.875  ,'label': '  O12  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.875  ,'y':    0.083   ,'z':    0.375  ,'label': '  O13  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.125  ,'y':    0.917   ,'z':    0.625  ,'label': '  O13  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.333  ,'y':    0.500   ,'z':    0.333  ,'label': '  ZW1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.667  ,'y':    0.500   ,'z':    0.667  ,'label': '  ZW1  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.417  ,'y':    0.000   ,'z':    0.417  ,'label': '  ZW2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.583  ,'y':    1.000   ,'z':    0.583  ,'label': '  ZW2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.583  ,'y':    0.000   ,'z':    0.583  ,'label': '  ZW2  '},
+        {'Zatom': 8., 'fraction': 1.000, 'x':   0.417  ,'y':    1.000   ,'z':    0.417  ,'label': '  ZW2  '} ]
+	
+	
+	
+    cryst['volume'] = cryst['a'] * cryst['b'] * cryst['c']
 
     return cryst
 
+
+#
+# code
+#
+
+def voigt1(x,a,area=0):
+
+    xx = x - a[1]
+    #
+    # gaussian and lorentzian normalized to 1 in amplitude
+    #
+    lor = 1.0 + (xx/(0.5 * a[2]))**2
+    gau = numpy.exp( - (xx*2.0 * numpy.sqrt(numpy.log(2.0))/a[2])**2 )
+
+    if area == 1:
+      res = (a[3]/lor/numpy.pi*2+(1.0-a[3])* gau * numpy.sqrt(4.0*numpy.log(2.0)/numpy.pi) )*a[0]/a[2]
+    else:
+      res = (a[3]/lor + (1.0 - a[3])* gau )*a[0]
+
+    return res
+
+
+def structure_info(cryst,verbose=0,file_out=""):
+    txt = ""
+    txt += "name: %s\n"   %  (cryst['name']  )
+    txt += "a: %f\n"      %  (cryst['a']     )
+    txt += "b: %f\n"      %  (cryst['b']     )
+    txt += "c: %f\n"      %  (cryst['c']     )
+    txt += "alpha: %f\n"  %  (cryst['alpha'] )
+    txt += "beta: %f\n"   %  (cryst['beta']  )
+    txt += "gamma: %f\n"  %  (cryst['gamma'] )
+    txt += "n_atom: %d\n" %  (cryst['n_atom'])
+    txt += "volume: %f\n" %  (cryst['volume'])
+    for atom in cryst['atom']:
+        txt += "Z=%2d f:%3.1f xyz=(%5.3f, %5.3f, %5.3f)   %s \n"%(atom['Zatom'],atom['fraction'],
+                    atom['x'],atom['y'],atom['z'],atom['label'])
+
+    if file_out != "":
+        f = open(file_out,'w')
+        f.write(txt)
+        f.close()
+
+    if verbose:
+        print(txt)
+
+    return txt
 
 def structure_group(cryst1,cryst2,axis='a'):
     cryst = {} # cryst.copy()
@@ -433,6 +532,19 @@ def plot_lines(x1,y1,xtitle=r"$2\theta$",ytitle="Intensity",toptitle="",noblock=
 
     numBins = 50
     ax.plot(x,y,color='green')
+    plt.title(toptitle)
+    plt.xlabel(xtitle)
+    plt.ylabel(ytitle)
+
+    if noblock == 0:
+        plt.show()
+
+def plot_pattern(x1,y1,xtitle=r"$2\theta$",ytitle="Intensity",toptitle="",noblock=0):
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    ax.plot(x1,y1,color='green')
     plt.title(toptitle)
     plt.xlabel(xtitle)
     plt.ylabel(ytitle)
@@ -627,6 +739,51 @@ def reconvert_axes(p):
 
     return p2
 
+def broad_peaks(out,step_in_twotheta=0.02,FWHM=0.05,eta=0.0,file_out=""):
+    twotheta_min = out[5,:].min()
+    twotheta_max = out[5,:].max()
+    twotheta_interval = numpy.abs(twotheta_max - twotheta_min)
+    epsilon = twotheta_interval * 0.01
+    twotheta = numpy.arange(start=twotheta_min-epsilon,stop=twotheta_max+epsilon,step=0.02)
+    intensity = numpy.zeros_like(twotheta)
+
+    nlines = out.shape [1]
+    FWHM = 0.05
+    eta = 0.0
+
+
+    # 0 = miller index h
+    # 1 = miller index k
+    # 2 = miller index l
+    # 3 = dspacing in A
+    # 4 = |Real(Fh)} with Fh the structure factor
+    # 5 = 2thete: Twice the Bragg angle
+    # 6 = multiplicity of the reflection
+    # 7 = intensity (arbitrary units)
+    # 8 = intensity (% of highest reflection)
+
+    print("nlines: ",nlines)
+    for i in range(nlines):
+        # i0 = ( out[4,i] )**2 * out[7,i] * lorentz(out[5,i]/2.)
+        # i0 = out[7,i]
+        intensity = intensity + voigt1(twotheta,[out[7,i] ,out[5,i],FWHM,eta],area=1)
+
+    intensity /= intensity.max()
+    intensity *= 100.0
+
+    if file_out != "":
+        f = open(file_out,'w')
+        for i in range(len(twotheta)):
+            f.write("%f  %f \n"%(twotheta[i],intensity[i]))
+        f.close()
+
+    return twotheta,intensity
+
+
+#
+# tests
+#
+
 def test_sepiolite_pattern():
     cryst =  structure_sepiolite()
 
@@ -695,27 +852,32 @@ def test_group_ab(a=structure_sepiolite(),b=structure_palygorskiteO()):
 
     print(structure_info(ab_ab_ab))
 
+
+#
+# main program
+#
+
 if __name__ == "__main__":
 
     # test_sepiolite_pattern()
-
     # test_group_si()
-
     # test_group_sepiolite()
-
     # test_group_ab(a=structure_palygorskiteO(),b=structure_palygorskiteO())
 
-    # p = structure_palygorskiteO()
-    #
-    # wavelength_in_A = ev2meter/13000.0*1e10
-    #
-    # out = calculate_reflections(p, wavelength_in_A=wavelength_in_A, twotheta_max=50.0, structure_factor_min=1e-3,file_out="",verbose=1)
-    # plot_lines(out[5,:],out[8,:],toptitle=p['name'],noblock=1)
-    #
-    # print('Ẅavelength is :',wavelength_in_A)
 
-    p = structure_palygorskiteO()
+    pO = structure_palygorskiteO()
+    p = reconvert_axes(pO)
 
-    p2 = reconvert_axes(p)
 
-    structure_info(p2,verbose=1,file_out="tmp.txt")
+    p = structure_palygorskite_new()
+
+
+    out = calculate_reflections(p, wavelength_in_A=0.86100131, twotheta_max=30, structure_factor_min=1e-3,file_out="",verbose=1)
+
+    plot_lines(out[5,:],out[8,:],toptitle="Palygorskite_new",noblock=0)
+
+    twotheta,intensity = broad_peaks(out,step_in_twotheta=0.02,FWHM=0.05,eta=0.0,file_out="tmp")
+
+
+    plot_pattern(twotheta,intensity)
+
