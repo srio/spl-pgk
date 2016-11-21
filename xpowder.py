@@ -56,6 +56,31 @@ def structure_silicon():
     return cryst
 
 
+def structure_MgO():
+    cryst = {} # cryst.copy()
+
+    cryst['name']   = b"MgO"
+    cryst['a']      =  4.217
+    cryst['b']      =  4.217
+    cryst['c']      =  4.217
+    cryst['alpha']  = 90.0
+    cryst['beta']   = 90.0
+    cryst['gamma']  = 90.0
+    cryst['n_atom'] =  8
+    cryst['atom']   = [{'x': 0.0,  'y': 0.0,  'z': 0.0,  'Zatom': 12, 'fraction': 1.0, 'label':'Mg'},
+                       {'x': 0.0,  'y': 0.5,  'z': 0.5,  'Zatom': 12, 'fraction': 1.0, 'label':'Mg'},
+                       {'x': 0.5,  'y': 0.0,  'z': 0.5,  'Zatom': 12, 'fraction': 1.0, 'label':'Mg'},
+                       {'x': 0.5,  'y': 0.5,  'z': 0.0,  'Zatom': 12, 'fraction': 1.0, 'label':'Mg'},
+                       {'x': 0.5,  'y': 0.5,  'z': 0.5,  'Zatom': 8 , 'fraction': 1.0, 'label':'O'},
+                       {'x': 0.5,  'y': 0.0,  'z': 0.0,  'Zatom': 8 , 'fraction': 1.0, 'label':'O'},
+                       {'x': 0.0,  'y': 0.5,  'z': 0.0,  'Zatom': 8 , 'fraction': 1.0, 'label':'O'},
+                       {'x': 0.0,  'y': 0.0,  'z': 0.5,  'Zatom': 8 , 'fraction': 1.0, 'label':'O'}]
+    cryst['volume'] = 74.99128631299997
+
+    return cryst
+
+
+
 def structure_sepiolite():
     cryst = {} # cryst.copy()
 
@@ -859,25 +884,42 @@ def test_group_ab(a=structure_sepiolite(),b=structure_palygorskiteO()):
 
 if __name__ == "__main__":
 
+
+    p = structure_MgO()
+
+
+    out = calculate_reflections(p, wavelength_in_A=1.54, twotheta_max=70, structure_factor_min=1e-3,file_out="",verbose=1)
+
+    plot_lines(out[5,:],out[8,:],toptitle="MgO",noblock=0)
+
+    twotheta,intensity = broad_peaks(out,step_in_twotheta=0.02,FWHM=0.05,eta=0.0,file_out="tmp")
+
+
+    plot_pattern(twotheta,intensity)
+
+
+
+
+
     # test_sepiolite_pattern()
     # test_group_si()
     # test_group_sepiolite()
     # test_group_ab(a=structure_palygorskiteO(),b=structure_palygorskiteO())
 
 
-    pO = structure_palygorskiteO()
-    p = reconvert_axes(pO)
-
-
-    p = structure_palygorskite_new()
-
-
-    out = calculate_reflections(p, wavelength_in_A=0.86100131, twotheta_max=30, structure_factor_min=1e-3,file_out="",verbose=1)
-
-    plot_lines(out[5,:],out[8,:],toptitle="Palygorskite_new",noblock=0)
-
-    twotheta,intensity = broad_peaks(out,step_in_twotheta=0.02,FWHM=0.05,eta=0.0,file_out="tmp")
-
-
-    plot_pattern(twotheta,intensity)
+    # pO = structure_palygorskiteO()
+    # p = reconvert_axes(pO)
+    #
+    #
+    # p = structure_palygorskite_new()
+    #
+    #
+    # out = calculate_reflections(p, wavelength_in_A=0.86100131, twotheta_max=30, structure_factor_min=1e-3,file_out="",verbose=1)
+    #
+    # plot_lines(out[5,:],out[8,:],toptitle="Palygorskite_new",noblock=0)
+    #
+    # twotheta,intensity = broad_peaks(out,step_in_twotheta=0.02,FWHM=0.05,eta=0.0,file_out="tmp")
+    #
+    #
+    # plot_pattern(twotheta,intensity)
 
